@@ -90,7 +90,7 @@ export default function Header({
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 transform-gpu" style={{willChange: 'transform'}}>
+    <header className="sticky top-0 z-40">
       {/* Glassy header background */}
       <div className="relative shadow-sm" style={{ background: "var(--bg)" }}>
         <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
@@ -123,17 +123,7 @@ export default function Header({
 
             {/* Right: small badge (optional) + theme toggle */}
             <div className="flex items-center gap-3">
-              <span
-                className="hidden sm:inline-block rounded-full px-2 py-1 text-[11px]"
-                style={{
-                  background: "var(--card-bg)",
-                  color: "var(--muted)",
-                  border: "1px solid var(--ring)",
-                }}
-              >
-                Live, clean, modern UI
-              </span>
-
+            
               <div className="relative z-50">
                 <ThemeToggle />
               </div>
@@ -185,17 +175,16 @@ export default function Header({
                       type="button"
                       onClick={handleClear}
                       aria-label="Clear search"
-                      className="rounded-xl p-2 transform-gpu"
+                      className="rounded-xl p-2"
                       style={{
                         background: "var(--card-bg)",
                         border: "1px solid var(--ring)",
-                        willChange: 'transform'
                       }}
                     >
                       <svg viewBox="0 0 24 24" className="h-4 w-4" style={{ color: "var(--muted)" }}>
                         <path
                           fill="currentColor"
-                          d="M6.225 4.811 4.811 6.225 9.586 11l-4.775 4.775 1.414 1.414L11 12.414l4.775 4.775 1.414-1.414L12.414 11极速加速器l4.775-4.775-1.414-1.414L11 9.586 6.225 4.811Z"
+                          d="M6.225 4.811 4.811 6.225 9.586 11l-4.775 4.775 1.414 1.414L11 12.414l4.775 4.775 1.414-1.414L12.414 11l4.775-4.775-1.414-1.414L11 9.586 6.225 4.811Z"
                         />
                       </svg>
                     </button>
@@ -203,20 +192,19 @@ export default function Header({
 
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transform-gpu"
+                    className="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold"
                     aria-label="Search"
                     style={{
                       color: "#fff",
                       background: "linear-gradient(90deg,var(--brand-600),#8b3fe4)",
                       boxShadow: "0 8px 20px rgba(99,102,241,0.12)",
                       border: "none",
-                      willChange: 'transform'
                     }}
                   >
                     <svg viewBox="0 0 24 24" className="h-4 w-4">
                       <path
                         fill="currentColor"
-                        d="极速加速器 M15.8 14.4h.9l5 5a1 1 0 1 1-1.4 1.4l-5-5v-.9l-.3-.3a7 7 0 1 1 1.4-1.4l.4.2ZM10.5 16a5.5 5.5 0 1 极速加速器 0 0-11 5.5 5.5 0 0 0 0 11Z"
+                        d="M15.8 14.4h.9l5 5a1 1 0 1 1-1.4 1.4l-5-5v-.9l-.3-.3a7 7 0 1 1 1.4-1.4l.4.2ZM10.5 16a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11Z"
                       />
                     </svg>
                     <span className="hidden sm:inline">Search</span>
@@ -227,22 +215,19 @@ export default function Header({
               {/* dropdown results */}
               {showDropdown && results.length > 0 && (
                 <div
-                  className="absolute z-50 mt-2 w-full rounded-xl shadow-lg max-h-80 overflow-y-auto smooth-scroll"
+                  className="absolute z-50 mt-2 w-full rounded-xl shadow-lg max-h-80 overflow-y-auto"
                   style={{ background: "var(--dropdown-bg)", border: "1px solid var(--ring)" }}
                 >
                   {results.map((book, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-3 px-3 py-2 hover:bg-[rgba(var(--surface-rgb),0.98)] cursor-pointer transform-gpu"
-                      style={{willChange: 'transform'}}
+                      className="flex items-center gap-3 px-3 py-2 hover:bg-[rgba(var(--surface-rgb),0.98)] cursor-pointer"
                     >
                       {book.cover_i ? (
                         <img
                           src={`https://covers.openlibrary.org/b/id/${book.cover_i}-S.jpg`}
                           alt={book.title}
                           className="h-10 w-7 object-cover rounded shadow-sm"
-                          loading="lazy"
-                          decoding="async"
                         />
                       ) : (
                         <div
