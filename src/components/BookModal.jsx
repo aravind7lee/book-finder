@@ -2,204 +2,289 @@
 import { useEffect, useState } from 'react'
 import { getWorkDetails } from '../api/bookService'
 import { COVERS_BASE } from '../utils/constants'
+import { X, BookOpen, Calendar, Languages, Tag, User, AlertCircle } from 'lucide-react'
 
 export default function BookModal({ open, onClose, book }) {
   const [loading, setLoading] = useState(false)
   const [details, setDetails] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (!open || !book) return
+    
     let active = true
-    async function run() {
+    setError(null)
+    
+    async function fetchBookDetails() {
       setLoading(true)
       setDetails(null)
+      
       try {
-        const workId = book.key?.split('/').pop()
+        const workId = book.key?.split('/').pop() || book.olid
         if (workId) {
           const data = await getWorkDetails(workId)
           if (active) setDetails(data)
+        } else {
+          throw new Error('No work ID available for this book')
         }
-      } catch (e) {
-        console.error(e)
+      } catch (error) {
+        console.error('Error fetching book details:', error)
+        if (active) setError('Failed to load book details. Please try again.')
       } finally {
         if (active) setLoading(false)
       }
     }
-    run()
-    return () => { active = false }
+    
+    fetchBookDetails()
+    
+    return () => { 
+      active = false 
+    }
   }, [open, book])
+
+  // Close modal when clicking outside or pressing Escape
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.keyCode === 27) onClose()
+    }
+    
+    const handleClickOutside = (e) => {
+      if (e.target.classList.contains('modal-overlay')) onClose()
+    }
+    
+    document.addEventListener('keydown', handleEscape)
+    document.addEventListener('click', handleClickOutside)
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [onClose])
+
+  // Function to extract description from various Open Library formats
+  const extractDescription = (descriptionData) => {
+    if (!descriptionData) return null
+    
+    // Handle string description
+    if (typeof descriptionData === 'string') {
+      return descriptionData
+    }
+    
+    // Handle object with value property
+    if (descriptionData.value) {
+      return descriptionData.value
+    }
+    
+    // Handle array of descriptions
+    if (Array.isArray(descriptionData)) {
+      // Try to find the first available description
+      for (const item of descriptionData) {
+        if (typeof item === 'string') return item
+        if (item && item.value) return item.value
+      }
+    }
+    
+    return null
+  }
 
   if (!open || !book) return null
 
   const subjects = details?.subjects || []
-  const desc = typeof details?.description === 'string'
-    ? details.description
-    : details?.description?.value
-
-  const authors = (book.author_name || []).slice(0, 2).join(', ')
-  const year = book.first_publish_year
-  const lang = (book.language || [])[0]
-  const coverId = book.cover_i
+  const desc = extractDescription(details?.description)
+  const authors = (book.author_name || []).slice(0, 3).join(', ') || 'Unknown Author'
+  const year = book.first_publish_year || 'Unknown Year'
+  const lang = (book.language || [])[0] || 'Unknown'
+  const coverId = book.cover_i || book.covers?.[0]
   const coverSrc = coverId ? COVERS_BASE(coverId, 'M') : null
+  const isbn = book.isbn?.[0] || ''
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 modal-overlay"
       role="dialog"
       aria-modal="true"
       aria-labelledby="book-modal-title"
     >
-      {/* Backdrop with soft blur + gradient accents (visual only) */}
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+      {/* Backdrop with soft blur */}
+      <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" />
 
-      {/* Gradient "aura" accents */}
+      {/* Gradient accents */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -left-20 h-72 w-72 rounded-full bg-gradient-to-br from-brand-500/20 to-fuchsia-500/20 blur-3xl"
+        className="pointer-events-none absolute -top-32 -left-20 h-72 w-72 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-28 -right-16 h-64 w-64 rounded-full bg-gradient-to-tr from-sky-500/15 to-brand-500/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-28 -right-16 h-64 w-64 rounded-full bg-gradient-to-tr from-cyan-500/15 to-blue-500/10 blur-3xl"
       />
 
       {/* Dialog Card */}
-      <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 flex justify-center transform-gpu" style={{willChange: 'transform'}}>
+      <div className="relative w-full max-w-2xl mx-auto transform-gpu" style={{willChange: 'transform'}}>
         <div
-          className={[
-            "relative w-full max-w-2xl",
-            "rounded-2xl backdrop-blur",
-            "ring-1 shadow-xl",
-            "isolate"
-          ].join(" ")}
+          className="relative w-full rounded-2xl backdrop-blur-md border shadow-xl isolate overflow-hidden"
           style={{
             background: 'var(--card-bg)',
-            borderColor: 'var(--ring)'
+            borderColor: 'var(--ring)',
+            maxHeight: '90vh'
           }}
         >
           {/* Top accent line */}
-          <div className="absolute inset-x-0 top-0 h-1.5 rounded-t-2xl bg-gradient-to-r from-brand-500 via-fuchsia-500 to-sky-500 opacity-80" />
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500" />
 
           {/* Sticky Header */}
-          <div className="sticky top-0 z-10 flex items-start gap-3 border-b p-4" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
-            {/* Cover thumb (visual aid only) */}
-            <div className="hidden sm:block">
-              <div className="h-14 w-10 overflow-hidden rounded-lg ring-1 ring-inset" style={{background: 'var(--skeleton)', borderColor: 'var(--ring)'}}>
+          <div className="sticky top-0 z-10 flex items-start gap-4 border-b p-5 bg-opacity-90 backdrop-blur-sm"
+            style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
+            
+            {/* Cover thumbnail */}
+            <div className="flex-shrink-0">
+              <div className="h-16 w-12 overflow-hidden rounded-md border shadow-sm" style={{borderColor: 'var(--ring)'}}>
                 {coverSrc ? (
-                  <img src={coverSrc} alt="" className="h-full w-full object-cover" />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center">
-                    <svg viewBox="0 0 24 24" className="h-5 w-5" style={{color: 'var(--muted)'}} aria-hidden="true">
-                      <path fill="currentColor" d="M6 4.5h9.25A2.75 2.75 0 0 1 18 7.25V19a.75.75 0 0 1-1.2.6L12 16.25 7.2 19.6A.75.75 0 0 1 6 19V4.5Z" />
-                      <path fill="currentColor" d="M19.5 7.25V18a.75.75 0 0 1-1.5 0V7.25a1.25 1.25 0 0 0-1.25-1.25H6a.75.75 0 0 1 0-1.5h10.75A2.75 2.75 0 0 1 19.5 7.25Z" className="opacity-50" />
-                    </svg>
-                  </div>
-                )}
+                  <img 
+                    src={coverSrc} 
+                    alt={`Cover of ${book.title}`} 
+                    className="h-full w-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none'
+                      e.target.nextSibling.style.display = 'flex'
+                    }}
+                  />
+                ) : null}
+                <div className={`h-full w-full items-center justify-center bg-gray-100 dark:bg-gray-800 ${coverSrc ? 'hidden' : 'flex'}`}>
+                  <BookOpen size={16} className="text-gray-400" />
+                </div>
               </div>
             </div>
 
-            {/* Title & meta */}
+            {/* Title & metadata */}
             <div className="min-w-0 flex-1">
-              <h3 id="book-modal-title" className="line-clamp-2 text-base font-semibold tracking-[-0.01em]" style={{color: 'var(--text)'}}>
+              <h3 id="book-modal-title" className="text-lg font-bold tracking-tight line-clamp-2" style={{color: 'var(--text)'}}>
                 {book.title}
               </h3>
-              <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
-                {authors && <span style={{ color: "var(--muted)" }}>{authors}</span>}
-                {year && (
-                  <span className="inline-flex items-center rounded-full px-2 py-0.5 ring-1" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)', color: 'var(--text)'}}>
-                    {year}
-                  </span>
-                )}
-                {lang && (
-                  <span className="inline-flex items-center rounded-full bg-gradient-to-br from-brand-500/10 to-fuchsia-500/10 px-2 py-0.5 ring-1" style={{borderColor: 'var(--ring)', color: 'var(--text)'}}>
-                    {lang}
-                  </span>
-                )}
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                <span className="flex items-center gap-1" style={{ color: "var(--muted)" }}>
+                  <User size={12} />
+                  {authors}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs border"
+                  style={{background: 'var(--card-bg)', borderColor: 'var(--ring)', color: 'var(--text)'}}>
+                  <Calendar size={12} />
+                  {year}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs border bg-gradient-to-br from-blue-500/10 to-purple-500/10"
+                  style={{borderColor: 'var(--ring)', color: 'var(--text)'}}>
+                  <Languages size={12} />
+                  {lang.toUpperCase()}
+                </span>
               </div>
             </div>
 
-            {/* Close button (same behavior) */}
+            {/* Close button */}
             <button
-              className={[
-                "shrink-0 rounded-xl p-2 transition transform-gpu",
-                "shadow-sm hover:shadow-md",
-                "hover:-translate-y-0.5 active:translate-y-0",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-              ].join(" ")}
+              className="flex-shrink-0 rounded-lg p-2 transition-all duration-150 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               onClick={onClose}
               aria-label="Close"
               style={{
-                background: 'var(--card-bg)',
                 border: '1px solid var(--ring)',
-                willChange: 'transform'
               }}
             >
-              <svg viewBox="0 0 24 24" className="h-4 w-4" style={{color: 'var(--text)'}} aria-hidden="true">
-                <path
-                  fill="currentColor"
-                  d="M6.225 4.811 4.811 6.225 9.586 11l-4.775 4.775 1.414 1.414L11 12.414l4.775 4.775 1.414-1.414L12.414 11l4.775-4.775-1.414-1.414L11 9.586 6.225 4.811Z"
-                />
-              </svg>
+              <X size={18} style={{color: 'var(--text)'}} />
             </button>
           </div>
 
           {/* Body */}
-          <div className="relative max-h-[75vh] overflow-auto p-4 sm:p-5 smooth-scroll">
-            {/* Loading state — purely visual skeleton, no logic changes */}
-            {loading && (
-              <div className="space-y-3">
-                <div className="h-4 w-2/3 animate-pulse rounded" style={{background: 'var(--skeleton)'}} />
-                <div className="h-4 w-5/6 animate-pulse rounded" style={{background: 'var(--skeleton)'}} />
-                <极速加速器 div className="h-4 w-4/6 animate-pulse rounded" style={{background: 'var(--skeleton)'}} />
-                <div className="mt-3 flex flex-wrap gap-2">
+          <div className="max-h-[60vh] overflow-y-auto p-5">
+            {/* Error state */}
+            {error && (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <AlertCircle size={32} className="text-red-500 mb-2" />
+                <p className="text-red-500 font-medium">{error}</p>
+                <p className="text-sm text-gray-500 mt-2">Please try selecting another book</p>
+              </div>
+            )}
+
+            {/* Loading state */}
+            {loading && !error && (
+              <div className="space-y-4">
+                <div className="h-4 w-2/3 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-5/6 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-4/6 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                
+                <div className="mt-6 flex flex-wrap gap-2">
                   {Array.from({ length: 6 }).map((_, i) => (
-                    <span key={i} className="inline-block h-6 w-16 animate-pulse rounded-full" style={{background: 'var(--skeleton)'}} />
+                    <span key={i} className="h-6 w-20 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
                   ))}
                 </div>
               </div>
             )}
 
-            {!loading && (
+            {/* Content */}
+            {!loading && !error && details && (
               <>
-                {desc && (
-                  <p className="text-[0.95rem] leading-6" style={{color: 'var(--text)'}}>
-                    {desc}
-                  </p>
+                {desc ? (
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                      <BookOpen size={16} />
+                      Description
+                    </h4>
+                    <div 
+                      className="text-sm leading-6 prose prose-sm dark:prose-invert max-w-none"
+                      style={{color: 'var(--text)'}}
+                      dangerouslySetInnerHTML={{ __html: desc }}
+                    />
+                  </div>
+                ) : (
+                  <div className="mb-6 text-center py-4 text-gray-500 dark:text-gray-400">
+                    <BookOpen size={24} className="mx-auto mb-2 opacity-50" />
+                    <p>No description available for this book</p>
+                  </div>
                 )}
 
                 {subjects.length > 0 && (
-                  <div className="mt-4 space-y-2">
-                    <h4 className="text-sm font-semib极速加速器 old" style={{color: 'var(--text)'}}>Subjects</h4>
+                  <div className="mt-6">
+                    <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                      <Tag size={16} />
+                      Subjects
+                    </h4>
                     <div className="flex flex-wrap gap-2">
-                      {subjects.slice(0, 20).map((s) => (
+                      {subjects.slice(0, 15).map((subject) => (
                         <span
-                          key={s}
-                          className={[
-                            "chip",
-                            "ring-1 shadow-sm",
-                          ].join(" ")}
+                          key={subject}
+                          className="text-xs px-3 py-1.5 rounded-full border shadow-sm"
                           style={{
                             background: 'var(--card-bg)',
                             borderColor: 'var(--ring)',
                             color: 'var(--text)'
                           }}
                         >
-                          {s}
+                          {subject}
                         </span>
                       ))}
                     </div>
                   </div>
                 )}
 
-                {/* Gentle divider if both sections present */}
-                {(desc && subjects.length > 0) && (
-                  <div className="mt-6 h-px w-full" style={{background: 'var(--ring)'}} />
-                )}
+                {/* Additional book details */}
+                <div className="mt-6 pt-4 border-t" style={{borderColor: 'var(--ring)'}}>
+                  <h4 className="text-sm font-semibold mb-3">Additional Details</h4>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <span className="font-medium">ISBN:</span> {isbn || 'N/A'}
+                    </div>
+                    <div>
+                      <span className="font-medium">Pages:</span> {details?.number_of_pages || book.number_of_pages_median || 'N/A'}
+                    </div>
+                    <div>
+                      <span className="font-medium">First Published:</span> {details?.first_publish_date || year}
+                    </div>
+                    <div>
+                      <span className="font-medium">Edition Count:</span> {details?.edition_count || book.edition_count || 'N/A'}
+                    </div>
+                  </div>
+                </div>
               </>
             )}
           </div>
-
-          {/* Bottom padding / safe area */}
-          <div className="h-2" />
         </div>
       </div>
     </div>
