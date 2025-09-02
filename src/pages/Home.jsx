@@ -62,7 +62,7 @@ export default function Home() {
   }, [raw, filters])
 
   return (
-    <div className="min-h-screen overflow-x-hidden" style={{background: 'var(--bg)', color: 'var(--text)'}}>
+    <div className="min-h-screen overflow-x-hidden smooth-scroll" style={{background: 'var(--bg)', color: 'var(--text)'}}>
       <Header onSearch={setQuery} />
       <Filters onChange={setFilters} />
 

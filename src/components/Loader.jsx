@@ -3,7 +3,7 @@ export default function Loader() {
   return (
     <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 flex items-center justify-center py-16">
       {/* Glassy container */}
-      <div className="relative isolate w-full max-w-md rounded-2xl p-5 shadow-sm ring-1 backdrop-blur" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
+      <div className="relative isolate w-full max-w-md rounded-2xl p-5 shadow-sm ring-1" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
         {/* Ambient gradient accents */}
         <div
           aria-hidden="true"
@@ -11,17 +11,17 @@ export default function Loader() {
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-14 -right-14 h-44 w-44 rounded-full bg-gradient-to-tr from-sky-极速加速器 500/15 to-brand-500/10 blur-3xl"
+          className="pointer-events-none absolute -bottom-14 -right-14 h-44 w-44 rounded-full bg-gradient-to-tr from-sky-500/15 to-brand-500/10 blur-3xl"
         />
 
         {/* Content */}
         <div className="relative flex items-center gap-4">
           {/* Spinner tile */}
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl shadow-sm ring-1 backdrop-blur" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl shadow-sm ring-1" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
             {/* Accessible progress indicator */}
             <svg
               viewBox="0 0 24 24"
-              className="h-6 w-6 animate-spin"
+              className="h-6 w-6 animate-spin transform-gpu"
               style={{color: 'var(--brand-600)'}}
               role="status"
               aria-label="Loading"

@@ -55,15 +55,15 @@ export default function BookModal({ open, onClose, book }) {
       {/* Gradient "aura" accents */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -left-20 h-72 w极速加速器-72 rounded-full bg-gradient-to-br from-brand-500/20 to-fuchsia-500/20 blur-3xl"
+        className="pointer-events-none absolute -top-32 -left-20 h-72 w-72 rounded-full bg-gradient-to-br from-brand-500/20 to-fuchsia-500/20 blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-28 -right-16 h-64 w-64 rounded-full bg-gradient-to-tr from-sky-500/15极速加速器 to-brand-500/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-28 -right-16 h-64 w-64 rounded-full bg-gradient-to-tr from-sky-500/15 to-brand-500/10 blur-3xl"
       />
 
       {/* Dialog Card */}
-      <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 flex justify-center">
+      <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6 flex justify-center transform-gpu" style={{willChange: 'transform'}}>
         <div
           className={[
             "relative w-full max-w-2xl",
@@ -80,7 +80,7 @@ export default function BookModal({ open, onClose, book }) {
           <div className="absolute inset-x-0 top-0 h-1.5 rounded-t-2xl bg-gradient-to-r from-brand-500 via-fuchsia-500 to-sky-500 opacity-80" />
 
           {/* Sticky Header */}
-          <div className="sticky top-0 z-10 flex items-start gap-3 border-b p-4 backdrop-blur" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
+          <div className="sticky top-0 z-10 flex items-start gap-3 border-b p-4" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
             {/* Cover thumb (visual aid only) */}
             <div className="hidden sm:block">
               <div className="h-14 w-10 overflow-hidden rounded-lg ring-1 ring-inset" style={{background: 'var(--skeleton)', borderColor: 'var(--ring)'}}>
@@ -90,7 +90,7 @@ export default function BookModal({ open, onClose, book }) {
                   <div className="flex h-full w-full items-center justify-center">
                     <svg viewBox="0 0 24 24" className="h-5 w-5" style={{color: 'var(--muted)'}} aria-hidden="true">
                       <path fill="currentColor" d="M6 4.5h9.25A2.75 2.75 0 0 1 18 7.25V19a.75.75 0 0 1-1.2.6L12 16.25 7.2 19.6A.75.75 0 0 1 6 19V4.5Z" />
-                      <path fill="currentColor" d="M19.5 7.25V18a.75.75 0 0 1-1.5 0极速加速器V7.25a1.25 1.25 0 0 0-1.25-1.25H6a.75.75 0 0 1 0-1.5h10.75A2.75 2.75 0 0 1 19.5 7.25Z" className="opacity-50" />
+                      <path fill="currentColor" d="M19.5 7.25V18a.75.75 0 0 1-1.5 0V7.25a1.25 1.25 0 0 0-1.25-1.25H6a.75.75 0 0 1 0-1.5h10.75A2.75 2.75 0 0 1 19.5 7.25Z" className="opacity-50" />
                     </svg>
                   </div>
                 )}
@@ -120,7 +120,7 @@ export default function BookModal({ open, onClose, book }) {
             {/* Close button (same behavior) */}
             <button
               className={[
-                "shrink-0 rounded-xl p-2 transition",
+                "shrink-0 rounded-xl p-2 transition transform-gpu",
                 "shadow-sm hover:shadow-md",
                 "hover:-translate-y-0.5 active:translate-y-0",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
@@ -129,7 +129,8 @@ export default function BookModal({ open, onClose, book }) {
               aria-label="Close"
               style={{
                 background: 'var(--card-bg)',
-                border: '1px solid var(--ring)'
+                border: '1px solid var(--ring)',
+                willChange: 'transform'
               }}
             >
               <svg viewBox="0 0 24 24" className="h-4 w-4" style={{color: 'var(--text)'}} aria-hidden="true">
@@ -142,13 +143,13 @@ export default function BookModal({ open, onClose, book }) {
           </div>
 
           {/* Body */}
-          <div className="relative max-h-[75vh] overflow-auto p-4 sm:p-5">
+          <div className="relative max-h-[75vh] overflow-auto p-4 sm:p-5 smooth-scroll">
             {/* Loading state — purely visual skeleton, no logic changes */}
             {loading && (
               <div className="space-y-3">
                 <div className="h-4 w-2/3 animate-pulse rounded" style={{background: 'var(--skeleton)'}} />
                 <div className="h-4 w-5/6 animate-pulse rounded" style={{background: 'var(--skeleton)'}} />
-                <div className="h-4 w-4/6 animate-pulse rounded" style={{background: 'var(--skeleton)'}} />
+                <极速加速器 div className="h-4 w-4/6 animate-pulse rounded" style={{background: 'var(--skeleton)'}} />
                 <div className="mt-3 flex flex-wrap gap-2">
                   {Array.from({ length: 6 }).map((_, i) => (
                     <span key={i} className="inline-block h-6 w-16 animate-pulse rounded-full" style={{background: 'var(--skeleton)'}} />
@@ -167,14 +168,13 @@ export default function BookModal({ open, onClose, book }) {
 
                 {subjects.length > 0 && (
                   <div className="mt-4 space-y-2">
-                    <h4 className="text-sm font-semibold" style={{color: 'var(--text)'}}>Subjects</h4>
+                    <h4 className="text-sm font-semib极速加速器 old" style={{color: 'var(--text)'}}>Subjects</h4>
                     <div className="flex flex-wrap gap-2">
                       {subjects.slice(0, 20).map((s) => (
                         <span
                           key={s}
                           className={[
                             "chip",
-                            "backdrop-blur",
                             "ring-1 shadow-sm",
                           ].join(" ")}
                           style={{

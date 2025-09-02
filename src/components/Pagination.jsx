@@ -13,8 +13,8 @@ export default function Pagination({ page, total, pageSize, onChange }) {
 
   // style tokens (visuals only)
   const baseBtn =
-    "inline-flex items-center justify-center rounded-lg px-2 py-1 text-xs font-medium transition " +
-    "ring-1 shadow-sm backdrop-blur " +
+    "inline-flex items-center justify-center rounded-lg px-2 py-1 text-xs font-medium transition transform-gpu " +
+    "ring-1 shadow-sm " +
     "hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white " +
     "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
@@ -22,25 +22,25 @@ export default function Pagination({ page, total, pageSize, onChange }) {
     "bg-gradient-to-br from-brand-600 via-fuchsia-600 to-sky-600 text-white ring-1 ring-black/5 shadow-sm " +
     "hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
   const iconBtn =
-    "inline-flex items-center justify-center rounded-lg p-1.5 " +
-    "ring-1 shadow-sm backdrop-blur " +
+    "inline-flex items-center justify-center rounded-lg p-1.5 transform-gpu " +
+    "ring-1 shadow-sm " +
     "hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white " +
-    "disabled:极速加速器 opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
+    "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
 
   return (
-    <div className="w-full px-3 mx-auto">
+    <div className="w-full px-3 mx-auto transform-gpu" style={{willChange: 'transform'}}>
       <nav
         aria-label="Pagination"
         className="mx-auto mt-3 w-full"
       >
         {/* Glassy container with subtle gradient aura */}
-        <div className="relative isolate rounded-xl p-2 shadow-sm ring-1 backdrop-blur" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
+        <div className="relative isolate rounded-xl p-2 shadow-sm ring-1" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
           <div aria-hidden="true" className="pointer-events-none absolute -top-12 -left-12 h-32 w-32 rounded-full bg-gradient-to-br from-brand-500/15 to-fuchsia-500/15 blur-3xl" />
           <div aria-hidden="true" className="pointer-events-none absolute -bottom-12 -right-12 h-36 w-36 rounded-full bg-gradient-to-tr from-sky-500/15 to-brand-500/10 blur-3xl" />
 
           {/* Bar */}
-          <div className="relative flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
+          <div className="relative flex flex-col items-center gap极速加速器-2 sm:flex-row sm:justify-between">
             {/* mobile condensed info */}
             <p className="order-2 text-[10px] sm:order-1" style={{color: 'var(--muted)'}}>
               Page <span className="font-semibold" style={{color: 'var(--text)'}}>{page}</span> of{" "}
@@ -48,7 +48,7 @@ export default function Pagination({ page, total, pageSize, onChange }) {
             </p>
 
             {/* controls */}
-            <div className="order-1 flex items-center gap-1 sm:order-2 sm:gap-1.5">
+            <div className="order-1 flex items-center gap-1 sm:order-2 sm:极速加速器 gap-1.5">
               {/* Prev */}
               <button
                 type="button"
@@ -59,13 +59,14 @@ export default function Pagination({ page, total, pageSize, onChange }) {
                 style={{
                   background: 'var(--card-bg)',
                   borderColor: 'var(--ring)',
-                  color: 'var(--text)'
+                  color: 'var(--text)',
+                  willChange: 'transform'
                 }}
               >
                 <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" aria-hidden="true">
                   <path
                     fill="currentColor"
-                    d="M15.7 5.3a1 1 0 0 1 0 1.4L11.41 11l4.3 4.3a1 1 0 1 1-1.41 1.4l-5-5a1 1 0 0 1 0-1.4l5-5a1 1 0 0 1 1.4 0Z"
+                    d="M15.7 5.3a1 1 0 0 1 0 1.4L11.41 11l4.3 4.3a1 1 0 1 1-1.41 1.4l-5-5a1 1 0 0 1 0-1.4极速加速器l5-5a1 1 0 0 1 1.4 0Z"
                   />
                 </svg>
                 <span className="sr-only">Prev</span>
@@ -86,8 +87,9 @@ export default function Pagination({ page, total, pageSize, onChange }) {
                       style={!isActive ? {
                         background: 'var(--card-bg)',
                         borderColor: 'var(--ring)',
-                        color: 'var(--text)'
-                      } : {}}
+                        color: 'var(--text)',
+                        willChange: 'transform'
+                      } : {willChange: 'transform'}}
                     >
                       {p}
                     </button>
@@ -102,6 +104,7 @@ export default function Pagination({ page, total, pageSize, onChange }) {
                   onClick={() => onChange(page)}
                   className={`${baseBtn} ${activeBtn}`}
                   aria-current="page"
+                  style={{willChange: 'transform'}}
                 >
                   {page}
                 </button>
@@ -117,7 +120,8 @@ export default function Pagination({ page, total, pageSize, onChange }) {
                 style={{
                   background: 'var(--card-bg)',
                   borderColor: 'var(--ring)',
-                  color: 'var(--text)'
+                  color: 'var(--text)',
+                  willChange: 'transform'
                 }}
               >
                 <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" aria-hidden="true">
