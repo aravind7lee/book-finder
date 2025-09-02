@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* fallback tokens */
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface-rgb: 255,255,255;
+  --text: #0f1724;
+  --muted: #6b7280;
+  --ring: #e6e7eb;
+  --accent: #8E37EB;
+  --brand-600: #6366f1;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* skin mappings (Tailwind also maps these via tailwind.config) */
+.bg-skin-bg { background: var(--bg) !important; }
+.bg-skin-surface { background: var(--surface) !important; }
+.text-skin-text { color: var(--text) !important; }
+.text-skin-muted { color: var(--muted) !important; }
+
+/* glass header surface */
+.surface-bg {
+  background-color: rgba(var(--surface-rgb), 0.60);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* card */
+.card {
+  border-radius: 1rem;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+  border: 1px solid var(--ring);
+}
+
+/* focus styles */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 6px rgba(142,55,235,0.08);
+}
+
+/* toggle CSS bump animation */
+@keyframes bump {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.06); }
+  60% { transform: scale(.98); }
+  100% { transform: scale(1); }
+}
+.knob--bump { animation: bump 340ms cubic-bezier(.2,.9,.3,1); }
+
+/* header z-index helper */
+.z-header { z-index: 50; }

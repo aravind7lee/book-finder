@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Bookora</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.png" />
+
+    <!-- THEME BOOT (runs BEFORE React/CSS) — prevents flash of wrong theme -->
+    <script>
+      (function () {
+        try {
+          const KEY = 'bf-theme';
+          const stored = localStorage.getItem(KEY);
+          const prefersDark = window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const initial = stored || (prefersDark ? 'dark' : 'light');
+
+          const LIGHT = {
+            '--bg': '#f8fafc',
+            '--surface': '#ffffff',
+            '--surface-rgb': '255,255,255',
+            '--text': '#0f1724',
+            '--muted': '#6b7280',
+            '--ring': '#e6e7eb',
+            '--accent': '#8E37EB',
+            '--brand-600': '#6366f1'
+          };
+          const DARK = {
+            '--bg': '#071026',
+            '--surface': '#0f1724',
+            '--surface-rgb': '15,23,36',
+            '--text': '#e6eef9',
+            '--muted': '#9aa4b2',
+            '--ring': '#1f2937',
+            '--accent': '#8E37EB',
+            '--brand-600': '#8E37EB'
+          };
+
+          const root = document.documentElement;
+          root.setAttribute('data-theme', initial);
+          const tokens = initial === 'dark' ? DARK : LIGHT;
+          Object.keys(tokens).forEach(k => root.style.setProperty(k, tokens[k]));
+        } catch (err) {
+          console.error('theme boot error', err);
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
