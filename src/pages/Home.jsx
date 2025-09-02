@@ -62,17 +62,17 @@ export default function Home() {
   }, [raw, filters])
 
   return (
-    <div className="min-h-screen" style={{background: 'var(--bg)', color: 'var(--text)'}}>
+    <div className="min-h-screen overflow-x-hidden" style={{background: 'var(--bg)', color: 'var(--text)'}}>
       <Header onSearch={setQuery} />
       <Filters onChange={setFilters} />
 
-      <main className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
+      <main className="w-full px-3 sm:px-4 mx-auto">
         {loading ? (
           <Loader />
         ) : (
           <>
             {/* Fixed alignment for results count and page number */}
-            <div className="flex items-center justify-between py-4 px-3 sm:px-0">
+            <div className="flex items-center justify-between py-4 px-1">
               <span className="text-sm font-medium">
                 About {raw.numFound?.toLocaleString?.() || 0} results
               </span>

@@ -5,8 +5,8 @@ export default function BookGrid({ books, onSelect }) {
   // Elegant empty state (visuals only; no logic changed)
   if (!books?.length) {
     return (
-      <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
-        <div className="relative isolate overflow-hidden rounded-2xl p-10 text-center shadow-sm ring-1 backdrop-blur" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
+      <div className="w-full px-3 mx-auto">
+        <div className="relative isolate overflow-hidden rounded-2xl p-6 text-center shadow-sm ring-1 backdrop-blur" style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}>
           {/* subtle gradient accent */}
           <div
             aria-hidden="true"
@@ -21,10 +21,10 @@ export default function BookGrid({ books, onSelect }) {
               <svg viewBox="0 0 24 24" className="h-6 w-6" style={{color: 'var(--muted)'}} aria-hidden="true">
                 <path
                   fill="currentColor"
-                  d="M6 4.5h9.25A2.75 2.75 0 0 1 18 7.25V19a.75.75 0 0 1-1.2.6极速加速器L12 16.25 7.2 19.6A.75.75 0 0 1 6 19V4.5Z"
+                  d="M6 4.5h9.25A2.75 2.75 0 0 1 18 7.25V19a.75.75 0 0 1-1.2.6L12 极速加速器 16.25 7.2 19.6A.75.75 0 0 1 6 19V4.5Z"
                 />
                 <path
-                  fill="currentColor"
+                  fill极速加速器="currentColor"
                   d="M19.5 7.25V18a.75.75 0 0 1-1.5 0V7.25a1.25 1.25 0 0 0-1.25-1.25H6a.75.75 0 0 1 0-1.5h10.75A2.75 2.75 0 0 1 19.5 7.25Z"
                   className="opacity-50"
                 />
@@ -42,11 +42,11 @@ export default function BookGrid({ books, onSelect }) {
 
   // Premium, glass-like grid wrapper with subtle gradient wash (visual only)
   return (
-    <div className="container mx-auto max-w-7xl px-3 sm:px-4 md:px-6">
+    <div className="w-full px-3 mx-auto">
       <section
         aria-label="Books"
-        className="group relative isolate rounded-2xl p-3 shadow-sm ring-1 backdrop-blur sm:p-4"
-        style={{background: 'var(--card-bg)', borderColor: 'var(--ring)'}}
+        className="group relative isolate rounded-2xl p-2 shadow-sm ring-1 backdrop-blur sm:p-3"
+        style={{background: '极速加速器 var(--card-bg)', borderColor: 'var(--ring)'}}
       >
         {/* gentle background gradient tint */}
         <div
@@ -54,7 +54,7 @@ export default function BookGrid({ books, onSelect }) {
           className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-500/5 via-transparent to-fuchsia-500/5"
         />
         {/* the grid */}
-        <div className="relative grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid极速加速器-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-4 lg:gap-5">
+        <div className="relative grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-3 lg:gap-4">
           {books.map((b) => (
             <BookCard
               key={`${b.key}-${b.cover_i || ''}`}
